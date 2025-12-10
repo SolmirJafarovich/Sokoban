@@ -98,7 +98,11 @@ public sealed class ProfileSelectionScreen : IGameScreen
 
         if (IsKeyPressed(Keys.Enter, current, previous))
             return new ScreenCommand(ScreenCommandType.GoToLevelSelection);
+        
+        if (IsKeyPressed(Keys.L, current, previous))
+            return new ScreenCommand(ScreenCommandType.GoToGlobalLeaderboard);
 
+        
         return ScreenCommand.None;
     }
 
@@ -125,7 +129,7 @@ public sealed class ProfileSelectionScreen : IGameScreen
 
         var hint = isEditingProfileName
             ? "ENTER-save  ESC-cancel  BACKSPACE-delete"
-            : "ENTER-select  N-new  R-rename  ESC-exit";
+            : "ENTER-select  N-new  R-rename L-Leaderboard  ESC-exit";
         var hintY = height - uiFont.LineSpacing - 20f;
         DrawCenteredScaledText(spriteBatch, hint, hintY, Color.LightGray);
     }

@@ -35,6 +35,9 @@ public sealed class Game1 : Game
     private PlayingScreen playingScreen = null!;
     private LeaderboardScreen leaderboardScreen = null!;
     private IGameScreen currentScreen = null!;
+    private GlobalLeaderboardScreen globalLeaderboardScreen = null!;
+    private GlobalLeaderboardService globalLeaderboardService = null!;
+
 
     public Game1()
     {
@@ -63,10 +66,13 @@ public sealed class Game1 : Game
 
         levelInfos = LevelDirectory.LoadLevels(AppContext.BaseDirectory);
 
+        globalLeaderboardService = new GlobalLeaderboardService();   // ← добавить
+
         ApplyDisplayMode();
 
         base.Initialize();
     }
+
 
     protected override void LoadContent()
     {
@@ -109,6 +115,16 @@ public sealed class Game1 : Game
             playerTexture);
 
         leaderboardScreen = new LeaderboardScreen(
+            GraphicsDevice,
+            uiFont,
+            whiteTexture);
+        
+        leaderboardScreen = new LeaderboardScreen(
+            GraphicsDevice,
+            uiFont,
+            whiteTexture);
+
+        globalLeaderboardScreen = new GlobalLeaderboardScreen(   // ← добавить
             GraphicsDevice,
             uiFont,
             whiteTexture);
@@ -192,6 +208,13 @@ public sealed class Game1 : Game
         {
             OpenLeaderboardForSelectedLevel();
         }
+        
+        if (command.Type == ScreenCommandType.GoToGlobalLeaderboard)
+        {
+            OpenGlobalLeaderboard();
+            return;
+        }
+
     }
 
     private void SyncCurrentProfileFromSelection()
@@ -246,4 +269,12 @@ public sealed class Game1 : Game
 
         IsMouseVisible = !isFullScreen;
     }
+    
+    private void OpenGlobalLeaderboard()
+    {
+        var entries = globalLeaderboardService.BuildLeaderboard(profiles);
+        globalLeaderboardScreen.SetEntries(entries);
+        currentScreen = globalLeaderboardScreen;
+    }
+
 }
