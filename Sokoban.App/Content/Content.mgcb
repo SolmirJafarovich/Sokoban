@@ -1,0 +1,80 @@
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:..\bin\Debug\net9.0\Content
+/intermediateDir:..\obj\Content
+
+#-------------------------------- Content -----------------------------------#
+
+
+# ground.png (пол)
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyEnabled=False
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tiles\ground.png
+#----------------------------------------------------------------------------#
+
+# wall.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyEnabled=False
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tiles\wall.png
+#----------------------------------------------------------------------------#
+
+# target.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyEnabled=False
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tiles\target.png
+#----------------------------------------------------------------------------#
+
+# crate.png (ящик)
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyEnabled=False
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tiles\crate.png
+#----------------------------------------------------------------------------#
+
+# player.png (кладовщик)
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyEnabled=False
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tiles\player.png
+#----------------------------------------------------------------------------#
+
+# UiFont.spritefont (меню-шрифт)
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts\UiFont.spritefont
+#----------------------------------------------------------------------------#

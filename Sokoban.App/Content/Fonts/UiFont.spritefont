@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns="http://schemas.microsoft.com/xna/2006/content">
+    <Asset Type="Microsoft.Xna.Framework.Content.Pipeline.Graphics.FontDescription">
+        <FontName>Press Start 2P</FontName>
+        <Size>16</Size>
+        <Spacing>2</Spacing>
+        <UseKerning>true</UseKerning>
+        <Style>Regular</Style>
+        <CharacterRegions>
+            <CharacterRegion>
+                <Start> </Start>
+                <End>~</End>
+            </CharacterRegion>
+        </CharacterRegions>
+    </Asset>
+</XnaContent>
