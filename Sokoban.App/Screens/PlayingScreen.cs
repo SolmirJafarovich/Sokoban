@@ -19,6 +19,8 @@ public sealed class PlayingScreen : IGameScreen
 
     private Level? level;
     private string? currentLevelId;
+    private int elapsedMilliseconds;
+    private int steps;
 
     public PlayingScreen(
         GraphicsDevice graphicsDevice,
@@ -42,6 +44,8 @@ public sealed class PlayingScreen : IGameScreen
     {
         level = newLevel;
         currentLevelId = levelId;
+        elapsedMilliseconds = 0;
+        steps = 0;
     }
 
     public ScreenCommand Update(GameTime gameTime, KeyboardState current, KeyboardState previous)
@@ -49,29 +53,52 @@ public sealed class PlayingScreen : IGameScreen
         if (level == null)
             return new ScreenCommand(ScreenCommandType.GoToLevelSelection);
 
+        elapsedMilliseconds += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+
         if (IsActionPressed(current, previous, Keys.Escape, Keys.Q))
             return new ScreenCommand(ScreenCommandType.GoToLevelSelection);
 
         if (IsUpPressed(current, previous))
-            level.TryMove(Direction.Up);
+        {
+            var result = level.TryMove(Direction.Up);
+            if (result != MoveResult.None)
+                steps++;
+        }
 
         if (IsDownPressed(current, previous))
-            level.TryMove(Direction.Down);
+        {
+            var result = level.TryMove(Direction.Down);
+            if (result != MoveResult.None)
+                steps++;
+        }
 
         if (IsLeftPressed(current, previous))
-            level.TryMove(Direction.Left);
+        {
+            var result = level.TryMove(Direction.Left);
+            if (result != MoveResult.None)
+                steps++;
+        }
 
         if (IsRightPressed(current, previous))
-            level.TryMove(Direction.Right);
+        {
+            var result = level.TryMove(Direction.Right);
+            if (result != MoveResult.None)
+                steps++;
+        }
 
         if (level.IsCompleted())
         {
             var id = currentLevelId ?? string.Empty;
-            return new ScreenCommand(ScreenCommandType.GoToLevelSelection, id);
+            var safeTime = elapsedMilliseconds > 0 ? elapsedMilliseconds : 1;
+            var safeSteps = steps > 0 ? steps : 1;
+            var result = new LevelResult(id, safeTime, safeSteps);
+            return new ScreenCommand(ScreenCommandType.GoToLevelSelection, result);
         }
 
         return ScreenCommand.None;
     }
+
+
 
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
@@ -139,6 +166,19 @@ public sealed class PlayingScreen : IGameScreen
                 }
             }
         }
+
+        var seconds = elapsedMilliseconds / 1000.0;
+        var timeText = $"TIME: {seconds:0.0}s";
+        var stepsText = $"STEPS: {steps}";
+
+        var timeSize = uiFont.MeasureString(timeText);
+        var stepsSize = uiFont.MeasureString(stepsText);
+
+        var timePos = new Vector2(20, 20);
+        var stepsPos = new Vector2(20, 20 + timeSize.Y + 4);
+
+        spriteBatch.DrawString(uiFont, timeText, timePos, Color.LightGray);
+        spriteBatch.DrawString(uiFont, stepsText, stepsPos, Color.LightGray);
 
         var hint = "WASD/ARROWS-move  ESC/Q-levels";
         var hintSize = uiFont.MeasureString(hint);

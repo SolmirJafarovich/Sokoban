@@ -12,24 +12,13 @@ public sealed class PlayerProfile
         Name = NormalizeName(name);
         Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         CompletedLevels = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-    }
-
-    public PlayerProfile(string name, GameSettings settings, IEnumerable<string> completedLevels)
-        : this(name, settings)
-    {
-        if (completedLevels == null)
-            return;
-
-        foreach (var id in completedLevels)
-        {
-            if (!string.IsNullOrWhiteSpace(id))
-                CompletedLevels.Add(id);
-        }
+        LevelStatsById = new Dictionary<string, LevelStats>(StringComparer.OrdinalIgnoreCase);
     }
 
     public string Name { get; private set; }
     public GameSettings Settings { get; }
     public HashSet<string> CompletedLevels { get; }
+    public Dictionary<string, LevelStats> LevelStatsById { get; }
 
     public void Rename(string newName)
     {
@@ -52,6 +41,42 @@ public sealed class PlayerProfile
         return CompletedLevels.Contains(levelId);
     }
 
+    public void UpdateLevelStats(string levelId, int timeMs, int steps)
+    {
+        if (string.IsNullOrWhiteSpace(levelId))
+            return;
+
+        if (timeMs <= 0 || steps <= 0)
+        {
+            CompletedLevels.Add(levelId);
+            return;
+        }
+
+        if (!LevelStatsById.TryGetValue(levelId, out var stats))
+        {
+            stats = new LevelStats(timeMs, steps);
+            LevelStatsById[levelId] = stats;
+        }
+        else
+        {
+            var isBetterTime = timeMs < stats.BestTimeMs;
+            var isSameTimeBetterSteps = timeMs == stats.BestTimeMs && steps < stats.BestSteps;
+
+            if (isBetterTime || isSameTimeBetterSteps)
+            {
+                stats.BestTimeMs = timeMs;
+                stats.BestSteps = steps;
+            }
+        }
+
+        CompletedLevels.Add(levelId);
+    }
+
+    public bool TryGetLevelStats(string levelId, out LevelStats stats)
+    {
+        return LevelStatsById.TryGetValue(levelId, out stats);
+    }
+
     private static string NormalizeName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -64,4 +89,16 @@ public sealed class PlayerProfile
 
         return trimmed;
     }
+}
+
+public sealed class LevelStats
+{
+    public LevelStats(int bestTimeMs, int bestSteps)
+    {
+        BestTimeMs = bestTimeMs;
+        BestSteps = bestSteps;
+    }
+
+    public int BestTimeMs { get; set; }
+    public int BestSteps { get; set; }
 }

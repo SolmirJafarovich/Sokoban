@@ -33,6 +33,7 @@ public sealed class Game1 : Game
     private ProfileSelectionScreen profileSelectionScreen = null!;
     private LevelSelectionScreen levelSelectionScreen = null!;
     private PlayingScreen playingScreen = null!;
+    private LeaderboardScreen leaderboardScreen = null!;
     private IGameScreen currentScreen = null!;
 
     public Game1()
@@ -107,6 +108,11 @@ public sealed class Game1 : Game
             crateTexture,
             playerTexture);
 
+        leaderboardScreen = new LeaderboardScreen(
+            GraphicsDevice,
+            uiFont,
+            whiteTexture);
+
         currentScreen = profileSelectionScreen;
 
         base.LoadContent();
@@ -158,9 +164,10 @@ public sealed class Game1 : Game
 
         if (command.Type == ScreenCommandType.GoToLevelSelection)
         {
-            if (!string.IsNullOrEmpty(command.LevelId) && currentProfile != null)
+            if (command.Result != null && currentProfile != null)
             {
-                currentProfile.MarkLevelCompleted(command.LevelId);
+                var result = command.Result;
+                currentProfile.UpdateLevelStats(result.LevelId, result.TimeMs, result.Steps);
                 profileRepository.Save(profiles);
             }
 
@@ -178,6 +185,12 @@ public sealed class Game1 : Game
         {
             StartSelectedLevel();
             currentScreen = playingScreen;
+            return;
+        }
+
+        if (command.Type == ScreenCommandType.GoToLeaderboard)
+        {
+            OpenLeaderboardForSelectedLevel();
         }
     }
 
@@ -206,6 +219,23 @@ public sealed class Game1 : Game
         var levelId = Path.GetFileName(info.FilePath);
 
         playingScreen.SetLevel(level, levelId);
+    }
+
+    private void OpenLeaderboardForSelectedLevel()
+    {
+        if (levelInfos.Count == 0)
+            return;
+
+        var index = levelSelectionScreen.SelectedLevelIndex;
+        if (index < 0 || index >= levelInfos.Count)
+            index = 0;
+
+        var info = levelInfos[index];
+        var levelId = Path.GetFileName(info.FilePath);
+        var levelName = info.Name;
+
+        leaderboardScreen.SetLevel(levelId, levelName, profiles);
+        currentScreen = leaderboardScreen;
     }
 
     private void ApplyDisplayMode()

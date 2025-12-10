@@ -6,7 +6,22 @@ public enum ScreenCommandType
     ExitGame,
     GoToProfileSelection,
     GoToLevelSelection,
-    GoToPlaying
+    GoToPlaying,
+    GoToLeaderboard
+}
+
+public sealed class LevelResult
+{
+    public LevelResult(string levelId, int timeMs, int steps)
+    {
+        LevelId = levelId;
+        TimeMs = timeMs;
+        Steps = steps;
+    }
+
+    public string LevelId { get; }
+    public int TimeMs { get; }
+    public int Steps { get; }
 }
 
 public readonly struct ScreenCommand
@@ -14,12 +29,12 @@ public readonly struct ScreenCommand
     public static readonly ScreenCommand None = new(ScreenCommandType.None, null);
 
     public ScreenCommandType Type { get; }
-    public string? LevelId { get; }
+    public LevelResult? Result { get; }
 
-    public ScreenCommand(ScreenCommandType type, string? levelId)
+    public ScreenCommand(ScreenCommandType type, LevelResult? result)
     {
         Type = type;
-        LevelId = levelId;
+        Result = result;
     }
 
     public ScreenCommand(ScreenCommandType type)

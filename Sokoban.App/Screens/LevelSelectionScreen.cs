@@ -68,6 +68,9 @@ public sealed class LevelSelectionScreen : IGameScreen
         if (IsActionPressed(current, previous, Keys.Enter, Keys.Space))
             return new ScreenCommand(ScreenCommandType.GoToPlaying);
 
+        if (IsActionPressed(current, previous, Keys.L, Keys.Tab))
+            return new ScreenCommand(ScreenCommandType.GoToLeaderboard);
+
         return ScreenCommand.None;
     }
 
@@ -135,6 +138,7 @@ public sealed class LevelSelectionScreen : IGameScreen
 
             var levelInfo = levelInfos[i];
             var levelId = GetLevelId(levelInfo);
+
             var isCompleted = currentProfile != null && currentProfile.HasCompletedLevel(levelId);
 
             var outerColor = isSelected ? Color.Gold : Color.DimGray;
@@ -151,12 +155,12 @@ public sealed class LevelSelectionScreen : IGameScreen
                 rect.Y + 10f);
             spriteBatch.DrawString(uiFont, levelName, textPosition, Color.White);
 
-            var placeholderStars = isCompleted ? "***" : "---";
-            var starsSize = uiFont.MeasureString(placeholderStars);
+            var stars = isCompleted ? "***" : "---";
+            var starsSize = uiFont.MeasureString(stars);
             var starsPosition = new Vector2(
                 rect.X + (rect.Width - starsSize.X) / 2f,
                 rect.Bottom - starsSize.Y - 10f);
-            spriteBatch.DrawString(uiFont, placeholderStars, starsPosition, Color.LightGray);
+            spriteBatch.DrawString(uiFont, stars, starsPosition, Color.LightGray);
         }
 
         if (totalPages > 1)
@@ -190,7 +194,7 @@ public sealed class LevelSelectionScreen : IGameScreen
             spriteBatch.DrawString(uiFont, pageLabel, pagePosition, Color.LightGray);
         }
 
-        var hint = "WASD/ARROWS-move  ENTER-start  ESC/Q-profiles";
+        var hint = "WASD/ARROWS-move  ENTER-start  L-leaderboard  ESC/Q-profiles";
         var hintY = height - uiFont.LineSpacing - 40f;
         DrawCenteredScaledText(spriteBatch, hint, hintY, Color.LightGray);
     }
