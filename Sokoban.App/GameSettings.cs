@@ -5,34 +5,42 @@ public sealed class GameSettings
     private const int MinVolume = 0;
     private const int MaxVolume = 10;
 
-    public int MusicVolume { get; private set; } = 5;
-    public int EffectsVolume { get; private set; } = 5;
-    public bool IsFullScreen { get; private set; }
+    public GameSettings()
+    {
+    }
+
+    public GameSettings(int musicVolume, int effectsVolume, bool isFullScreen)
+    {
+        MusicVolume = Clamp(musicVolume);
+        EffectsVolume = Clamp(effectsVolume);
+        IsFullScreen = isFullScreen;
+    }
+
+    public int MusicVolume { get; set; } = 5;
+    public int EffectsVolume { get; set; } = 5;
+    public bool IsFullScreen { get; set; }
 
     public void ChangeMusicVolume(int delta)
     {
-        var value = MusicVolume + delta;
-        if (value < MinVolume)
-            value = MinVolume;
-        if (value > MaxVolume)
-            value = MaxVolume;
-
-        MusicVolume = value;
+        MusicVolume = Clamp(MusicVolume + delta);
     }
 
     public void ChangeEffectsVolume(int delta)
     {
-        var value = EffectsVolume + delta;
-        if (value < MinVolume)
-            value = MinVolume;
-        if (value > MaxVolume)
-            value = MaxVolume;
-
-        EffectsVolume = value;
+        EffectsVolume = Clamp(EffectsVolume + delta);
     }
 
     public void ToggleFullScreen()
     {
         IsFullScreen = !IsFullScreen;
+    }
+
+    private static int Clamp(int value)
+    {
+        if (value < MinVolume)
+            return MinVolume;
+        if (value > MaxVolume)
+            return MaxVolume;
+        return value;
     }
 }

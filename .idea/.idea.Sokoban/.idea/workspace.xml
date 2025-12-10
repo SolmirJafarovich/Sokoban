@@ -8,23 +8,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8786c22b-a78e-4dae-a611-25d518cdaf7f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Content/Fonts/UiFont.spritefont" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/GameScreen.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/GameSettings.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile4.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile5.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile6.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level4.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level5.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/ProfileRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/Screens/IGameScreen.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/Screens/LevelSelectionScreen.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/Screens/PlayingScreen.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/Screens/ProfileSelectionScreen.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/Screens/ScreenCommand.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Sokoban/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Sokoban/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sokoban.App/Game1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Game1.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/Sokoban.App.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Sokoban.App.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/GameSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/GameSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +38,13 @@
     <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelDirectory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/ProfileRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/IGameScreen.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/LevelSelectionScreen.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/PlayingScreen.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/ProfileSelectionScreen.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/ScreenCommand.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.Core/Cell.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.Core/CellType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.Core/Direction.cs" root0="FORCE_HIGHLIGHTING" />
@@ -120,7 +119,7 @@
       <workItem from="1765357523535" duration="4551000" />
       <workItem from="1765373009649" duration="1383000" />
       <workItem from="1765374411943" duration="3746000" />
-      <workItem from="1765385892205" duration="2281000" />
+      <workItem from="1765385892205" duration="6384000" />
     </task>
     <servers />
   </component>
