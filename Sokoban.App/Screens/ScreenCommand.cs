@@ -9,7 +9,8 @@ public enum ScreenCommandType
     GoToProfileSelection,
     GoToLevelSelection,
     GoToPlaying,
-    GoToLeaderboard
+    GoToLeaderboard,
+    GoToLevelResult
 }
 
 public sealed class LevelResult

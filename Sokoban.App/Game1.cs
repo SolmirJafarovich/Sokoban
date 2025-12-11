@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
@@ -40,6 +40,7 @@ public sealed class Game1 : Game
     private LevelSelectionScreen levelSelectionScreen = null!;
     private PlayingScreen playingScreen = null!;
     private LeaderboardScreen leaderboardScreen = null!;
+    private LevelResultScreen? levelResultScreen;
 
     private GlobalLeaderboardService globalLeaderboardService = null!;
     private IGameScreen currentScreen = null!;
@@ -195,6 +196,15 @@ public sealed class Game1 : Game
 
         if (command.Type == ScreenCommandType.GoToLevelSelection)
         {
+            // Особый случай: уровень только что завершён в PlayingScreen —
+            // показываем окно результата вместо мгновенного выхода к выбору уровня.
+            if (ReferenceEquals(currentScreen, playingScreen) && command.Result != null)
+            {
+                HandleLevelCompleted(command.Result);
+                return;
+            }
+
+            // Старое поведение для остальных экранов, где в Result может быть статистика
             if (command.Result != null && currentProfile != null)
             {
                 var result = command.Result;
@@ -203,9 +213,7 @@ public sealed class Game1 : Game
             }
 
             if (ReferenceEquals(currentScreen, profileSelectionScreen))
-            {
                 SyncCurrentProfileFromSelection();
-            }
 
             currentScreen = levelSelectionScreen;
             return;
@@ -223,6 +231,36 @@ public sealed class Game1 : Game
             OpenLeaderboard();
             return;
         }
+    }
+
+    private void HandleLevelCompleted(LevelResult result)
+    {
+        if (currentProfile != null)
+        {
+            currentProfile.UpdateLevelStats(result.LevelId, result.TimeMs, result.Steps);
+            profileRepository.Save(profiles);
+        }
+        
+        var bestProfileSteps = (int?)null;
+        var bestProfileMilliseconds = (int?)null;
+
+        var bestGlobalPlayerName = (string?)null;
+        var bestGlobalSteps = (int?)null;
+        var bestGlobalMilliseconds = (int?)null;
+
+        levelResultScreen = new LevelResultScreen(
+            GraphicsDevice,
+            uiFont,
+            result.LevelId,
+            result.Steps,
+            result.TimeMs,
+            bestProfileSteps,
+            bestProfileMilliseconds,
+            bestGlobalPlayerName,
+            bestGlobalSteps,
+            bestGlobalMilliseconds);
+
+        currentScreen = levelResultScreen;
     }
 
     private void SyncCurrentProfileFromSelection()
