@@ -4,11 +4,12 @@ public enum ScreenCommandType
 {
     None,
     ExitGame,
+    GoToMainMenu,
+    GoToSettings,
     GoToProfileSelection,
     GoToLevelSelection,
     GoToPlaying,
-    GoToLeaderboard,
-    GoToGlobalLeaderboard
+    GoToLeaderboard
 }
 
 public sealed class LevelResult
@@ -21,7 +22,9 @@ public sealed class LevelResult
     }
 
     public string LevelId { get; }
+
     public int TimeMs { get; }
+
     public int Steps { get; }
 }
 
@@ -29,8 +32,10 @@ public readonly struct ScreenCommand
 {
     public static readonly ScreenCommand None = new(ScreenCommandType.None, null);
 
-    public ScreenCommandType Type { get; }
-    public LevelResult? Result { get; }
+    public ScreenCommand(ScreenCommandType type)
+        : this(type, null)
+    {
+    }
 
     public ScreenCommand(ScreenCommandType type, LevelResult? result)
     {
@@ -38,8 +43,7 @@ public readonly struct ScreenCommand
         Result = result;
     }
 
-    public ScreenCommand(ScreenCommandType type)
-        : this(type, null)
-    {
-    }
+    public ScreenCommandType Type { get; }
+
+    public LevelResult? Result { get; }
 }

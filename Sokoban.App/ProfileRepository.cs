@@ -16,6 +16,7 @@ public sealed class ProfileRepository
 
         var directory = Path.Combine(baseDirectory, "Profiles");
         Directory.CreateDirectory(directory);
+
         filePath = Path.Combine(directory, "profiles.json");
     }
 
@@ -33,12 +34,10 @@ public sealed class ProfileRepository
 
         foreach (var profileDto in dto.Profiles)
         {
-            var settings = new GameSettings(
-                profileDto.MusicVolume,
-                profileDto.EffectsVolume,
-                profileDto.IsFullScreen);
+            if (string.IsNullOrWhiteSpace(profileDto.Name))
+                continue;
 
-            var profile = new PlayerProfile(profileDto.Name, settings);
+            var profile = new PlayerProfile(profileDto.Name);
 
             if (profileDto.CompletedLevels != null)
             {
@@ -75,14 +74,9 @@ public sealed class ProfileRepository
 
         foreach (var profile in profiles)
         {
-            var settings = profile.Settings;
-
             var profileDto = new ProfileDto
             {
                 Name = profile.Name,
-                MusicVolume = settings.MusicVolume,
-                EffectsVolume = settings.EffectsVolume,
-                IsFullScreen = settings.IsFullScreen,
                 CompletedLevels = new List<string>(profile.CompletedLevels),
                 Levels = new List<LevelDto>()
             };
@@ -113,9 +107,6 @@ public sealed class ProfileRepository
     private sealed class ProfileDto
     {
         public string Name { get; set; } = string.Empty;
-        public int MusicVolume { get; set; }
-        public int EffectsVolume { get; set; }
-        public bool IsFullScreen { get; set; }
         public List<string>? CompletedLevels { get; set; }
         public List<LevelDto>? Levels { get; set; }
     }

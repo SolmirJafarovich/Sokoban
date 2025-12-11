@@ -8,11 +8,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8786c22b-a78e-4dae-a611-25d518cdaf7f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/GlobalLeaderboardEntry.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/GlobalLeaderboardService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Screens/GlobalLeaderboardScreen.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/Screens/MainMenuScreen.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/Screens/SettingsScreen.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/SettingsRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sokoban.App/UiTextUtils.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Sokoban/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Sokoban/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sokoban.App/Game1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Game1.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/GameSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/GameSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/ProfileRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/ProfileRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/GlobalLeaderboardScreen.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/LeaderboardScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/LeaderboardScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/LevelSelectionScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/LevelSelectionScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/PlayingScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/PlayingScreen.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/ProfileSelectionScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/ProfileSelectionScreen.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/ScreenCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/ScreenCommand.cs" afterDir="false" />
     </list>
@@ -39,13 +47,16 @@
     <setting file="file://$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/ProfileRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Program.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/GlobalLeaderboardScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/IGameScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/LeaderboardScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/LevelSelectionScreen.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/MainMenuScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/PlayingScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/ProfileSelectionScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/ScreenCommand.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/SettingsScreen.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/SettingsRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/UiTextUtils.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.Core/Cell.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.Core/CellType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.Core/Direction.cs" root0="FORCE_HIGHLIGHTING" />
@@ -54,6 +65,7 @@
     <setting file="file://$PROJECT_DIR$/Sokoban.Core/MoveResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.Core/Position.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -121,12 +133,14 @@
       <workItem from="1765373009649" duration="1383000" />
       <workItem from="1765374411943" duration="3746000" />
       <workItem from="1765385892205" duration="9870000" />
+      <workItem from="1765440934498" duration="6918000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

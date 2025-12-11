@@ -7,17 +7,17 @@ public sealed class PlayerProfile
 {
     private const int MaxNameLength = 16;
 
-    public PlayerProfile(string name, GameSettings settings)
+    public PlayerProfile(string name)
     {
         Name = NormalizeName(name);
-        Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         CompletedLevels = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         LevelStatsById = new Dictionary<string, LevelStats>(StringComparer.OrdinalIgnoreCase);
     }
 
     public string Name { get; private set; }
-    public GameSettings Settings { get; }
+
     public HashSet<string> CompletedLevels { get; }
+
     public Dictionary<string, LevelStats> LevelStatsById { get; }
 
     public void Rename(string newName)
@@ -59,13 +59,13 @@ public sealed class PlayerProfile
         }
         else
         {
-            var isBetterTime = timeMs < stats.BestTimeMs;
-            var isSameTimeBetterSteps = timeMs == stats.BestTimeMs && steps < stats.BestSteps;
+            var isBetterSteps = steps < stats.BestSteps;
+            var isSameStepsBetterTime = steps == stats.BestSteps && timeMs < stats.BestTimeMs;
 
-            if (isBetterTime || isSameTimeBetterSteps)
+            if (isBetterSteps || isSameStepsBetterTime)
             {
-                stats.BestTimeMs = timeMs;
                 stats.BestSteps = steps;
+                stats.BestTimeMs = timeMs;
             }
         }
 
@@ -100,5 +100,6 @@ public sealed class LevelStats
     }
 
     public int BestTimeMs { get; set; }
+
     public int BestSteps { get; set; }
 }

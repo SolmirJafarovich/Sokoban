@@ -194,7 +194,7 @@ public sealed class LevelSelectionScreen : IGameScreen
             spriteBatch.DrawString(uiFont, pageLabel, pagePosition, Color.LightGray);
         }
 
-        var hint = "WASD/ARROWS-move  ENTER-start  L-leaderboard  ESC/Q-profiles";
+        var hint = "WASD/ARROWS-move  ENTER-start  L-leaderboard  Q-profiles";
         var hintY = height - uiFont.LineSpacing - 40f;
         DrawCenteredScaledText(spriteBatch, hint, hintY, Color.LightGray);
     }

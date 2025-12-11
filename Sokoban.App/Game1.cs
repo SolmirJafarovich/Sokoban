@@ -12,6 +12,7 @@ namespace Sokoban.App;
 public sealed class Game1 : Game
 {
     private readonly GraphicsDeviceManager graphics;
+
     private SpriteBatch spriteBatch = null!;
     private Texture2D whiteTexture = null!;
 
@@ -24,20 +25,24 @@ public sealed class Game1 : Game
 
     private KeyboardState previousKeyboardState;
 
+    private SettingsRepository settingsRepository = null!;
     private ProfileRepository profileRepository = null!;
+
+    private GameSettings settings = null!;
     private List<PlayerProfile> profiles = new();
     private PlayerProfile? currentProfile;
 
     private IReadOnlyList<LevelInfo> levelInfos = Array.Empty<LevelInfo>();
 
+    private MainMenuScreen mainMenuScreen = null!;
+    private SettingsScreen settingsScreen = null!;
     private ProfileSelectionScreen profileSelectionScreen = null!;
     private LevelSelectionScreen levelSelectionScreen = null!;
     private PlayingScreen playingScreen = null!;
     private LeaderboardScreen leaderboardScreen = null!;
-    private IGameScreen currentScreen = null!;
-    private GlobalLeaderboardScreen globalLeaderboardScreen = null!;
-    private GlobalLeaderboardService globalLeaderboardService = null!;
 
+    private GlobalLeaderboardService globalLeaderboardService = null!;
+    private IGameScreen currentScreen = null!;
 
     public Game1()
     {
@@ -48,39 +53,39 @@ public sealed class Game1 : Game
 
     protected override void Initialize()
     {
-        profileRepository = new ProfileRepository(AppContext.BaseDirectory);
+        var baseDirectory = AppContext.BaseDirectory;
+
+        settingsRepository = new SettingsRepository(baseDirectory);
+        profileRepository = new ProfileRepository(baseDirectory);
+
+        settings = settingsRepository.Load();
 
         var loadedProfiles = profileRepository.Load();
         profiles = new List<PlayerProfile>(loadedProfiles);
 
         if (profiles.Count == 0)
-        {
-            var settings = new GameSettings();
-            profiles.Add(new PlayerProfile("Player 1", settings));
-        }
+            profiles.Add(new PlayerProfile("Player 1"));
 
         if (profiles.Count > 5)
             profiles = profiles.GetRange(0, 5);
 
         currentProfile = profiles[0];
 
-        levelInfos = LevelDirectory.LoadLevels(AppContext.BaseDirectory);
+        levelInfos = LevelDirectory.LoadLevels(baseDirectory);
 
-        globalLeaderboardService = new GlobalLeaderboardService();   // ← добавить
+        globalLeaderboardService = new GlobalLeaderboardService();
 
         ApplyDisplayMode();
 
         base.Initialize();
     }
 
-
     protected override void LoadContent()
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
 
         whiteTexture = new Texture2D(GraphicsDevice, 1, 1);
-        var data = new[] { Color.White };
-        whiteTexture.SetData(data);
+        whiteTexture.SetData(new[] { Color.White });
 
         floorTexture = Content.Load<Texture2D>("Tiles/ground");
         wallTexture = Content.Load<Texture2D>("Tiles/wall");
@@ -89,11 +94,14 @@ public sealed class Game1 : Game
         playerTexture = Content.Load<Texture2D>("Tiles/player");
         uiFont = Content.Load<SpriteFont>("Fonts/UiFont");
 
+        mainMenuScreen = new MainMenuScreen(GraphicsDevice, uiFont, whiteTexture);
+
+        settingsScreen = new SettingsScreen(GraphicsDevice, uiFont, whiteTexture, settings);
+
         profileSelectionScreen = new ProfileSelectionScreen(
             GraphicsDevice,
             uiFont,
             whiteTexture,
-            profileRepository,
             profiles);
 
         levelSelectionScreen = new LevelSelectionScreen(
@@ -117,19 +125,10 @@ public sealed class Game1 : Game
         leaderboardScreen = new LeaderboardScreen(
             GraphicsDevice,
             uiFont,
-            whiteTexture);
-        
-        leaderboardScreen = new LeaderboardScreen(
-            GraphicsDevice,
-            uiFont,
-            whiteTexture);
+            whiteTexture,
+            globalLeaderboardService);
 
-        globalLeaderboardScreen = new GlobalLeaderboardScreen(   // ← добавить
-            GraphicsDevice,
-            uiFont,
-            whiteTexture);
-
-        currentScreen = profileSelectionScreen;
+        currentScreen = mainMenuScreen;
 
         base.LoadContent();
     }
@@ -170,11 +169,27 @@ public sealed class Game1 : Game
             return;
         }
 
+        if (command.Type == ScreenCommandType.GoToMainMenu)
+        {
+            if (ReferenceEquals(currentScreen, settingsScreen))
+                settingsRepository.Save(settings);
+
+            if (ReferenceEquals(currentScreen, profileSelectionScreen))
+                profileRepository.Save(profiles);
+
+            currentScreen = mainMenuScreen;
+            return;
+        }
+
+        if (command.Type == ScreenCommandType.GoToSettings)
+        {
+            currentScreen = settingsScreen;
+            return;
+        }
+
         if (command.Type == ScreenCommandType.GoToProfileSelection)
         {
             currentScreen = profileSelectionScreen;
-            SyncCurrentProfileFromSelection();
-            levelSelectionScreen.SetCurrentProfile(currentProfile);
             return;
         }
 
@@ -190,7 +205,6 @@ public sealed class Game1 : Game
             if (ReferenceEquals(currentScreen, profileSelectionScreen))
             {
                 SyncCurrentProfileFromSelection();
-                levelSelectionScreen.SetCurrentProfile(currentProfile);
             }
 
             currentScreen = levelSelectionScreen;
@@ -206,25 +220,21 @@ public sealed class Game1 : Game
 
         if (command.Type == ScreenCommandType.GoToLeaderboard)
         {
-            OpenLeaderboardForSelectedLevel();
-        }
-        
-        if (command.Type == ScreenCommandType.GoToGlobalLeaderboard)
-        {
-            OpenGlobalLeaderboard();
+            OpenLeaderboard();
             return;
         }
-
     }
 
     private void SyncCurrentProfileFromSelection()
     {
         var selectedProfile = profileSelectionScreen.CurrentProfile;
         if (selectedProfile != null)
+        {
             currentProfile = selectedProfile;
-
-        if (currentProfile != null)
             levelSelectionScreen.SetCurrentProfile(currentProfile);
+        }
+
+        profileRepository.Save(profiles);
     }
 
     private void StartSelectedLevel()
@@ -244,37 +254,24 @@ public sealed class Game1 : Game
         playingScreen.SetLevel(level, levelId);
     }
 
-    private void OpenLeaderboardForSelectedLevel()
+    private void OpenLeaderboard()
     {
         if (levelInfos.Count == 0)
             return;
 
-        var index = levelSelectionScreen.SelectedLevelIndex;
-        if (index < 0 || index >= levelInfos.Count)
-            index = 0;
+        var selectedIndex = levelSelectionScreen.SelectedLevelIndex;
+        if (selectedIndex < 0 || selectedIndex >= levelInfos.Count)
+            selectedIndex = 0;
 
-        var info = levelInfos[index];
-        var levelId = Path.GetFileName(info.FilePath);
-        var levelName = info.Name;
-
-        leaderboardScreen.SetLevel(levelId, levelName, profiles);
+        leaderboardScreen.SetData(levelInfos, profiles, selectedIndex);
         currentScreen = leaderboardScreen;
     }
 
     private void ApplyDisplayMode()
     {
-        var isFullScreen = currentProfile != null && currentProfile.Settings.IsFullScreen;
-        graphics.IsFullScreen = isFullScreen;
+        graphics.IsFullScreen = settings.IsFullScreen;
         graphics.ApplyChanges();
 
-        IsMouseVisible = !isFullScreen;
+        IsMouseVisible = !settings.IsFullScreen;
     }
-    
-    private void OpenGlobalLeaderboard()
-    {
-        var entries = globalLeaderboardService.BuildLeaderboard(profiles);
-        globalLeaderboardScreen.SetEntries(entries);
-        currentScreen = globalLeaderboardScreen;
-    }
-
 }
