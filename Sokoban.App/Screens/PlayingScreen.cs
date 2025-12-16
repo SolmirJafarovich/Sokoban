@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+﻿﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Sokoban.Core;
@@ -61,6 +61,10 @@ public sealed class PlayingScreen : IGameScreen
 
         if (IsKeyPressed(Keys.Escape, current, previous))
             return new ScreenCommand(ScreenCommandType.GoToLevelSelection);
+
+        // Restart current level.
+        if (IsKeyPressed(Keys.R, current, previous))
+            return new ScreenCommand(ScreenCommandType.RestartLevel);
 
         // One move per update to avoid double-moves when multiple keys are pressed.
         var direction = GetPressedDirection(current, previous);
@@ -197,7 +201,7 @@ public sealed class PlayingScreen : IGameScreen
         UiTextUtils.DrawHint(
             spriteBatch,
             uiFont,
-            "WASD/ARROWS - move   ESC - levels",
+            "WASD/ARROWS - move   R - restart   ESC - levels",
             screenWidth,
             screenHeight);
     }

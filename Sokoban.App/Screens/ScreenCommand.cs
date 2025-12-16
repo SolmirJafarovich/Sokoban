@@ -10,7 +10,8 @@ public enum ScreenCommandType
     GoToLevelSelection,
     GoToPlaying,
     GoToLeaderboard,
-    GoToLevelResult
+    GoToLevelResult,
+    RestartLevel
 }
 
 public sealed class LevelResult

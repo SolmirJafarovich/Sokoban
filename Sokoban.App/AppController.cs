@@ -126,6 +126,18 @@ public sealed class AppController
             return false;
         }
 
+        if (command.Type == ScreenCommandType.RestartLevel)
+        {
+            // Restart only makes sense while playing.
+            if (ReferenceEquals(currentScreen, playingScreen))
+            {
+                StartSelectedLevel();
+                currentScreen = playingScreen;
+            }
+
+            return false;
+        }
+
         if (command.Type == ScreenCommandType.GoToLevelSelection)
         {
             // Special case: level just completed in PlayingScreen.
