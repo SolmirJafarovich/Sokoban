@@ -95,8 +95,7 @@ public sealed class LevelResultScreen : IGameScreen
         var boxTopLeft = new Vector2(
             (bounds.Width - boxSize.X) * 0.5f,
             (bounds.Height - boxSize.Y) * 0.5f);
-
-        // Draw box background (slightly transparent)
+        
         var boxRect = new Rectangle(
             (int)boxTopLeft.X,
             (int)boxTopLeft.Y,
@@ -104,16 +103,13 @@ public sealed class LevelResultScreen : IGameScreen
             (int)boxSize.Y);
 
         DrawFilledRect(spriteBatch, boxRect, new Color(0, 0, 0, 220));
-
-        // Draw border (2px relative to scale, but at least 1px)
+        
         var borderThickness = Math.Max(1, (int)MathF.Round(2f * scale));
         DrawRect(spriteBatch, boxRect, Color.White, borderThickness);
-
-        // Draw text inside with padding, scaled
+        
         var textPos = boxTopLeft + new Vector2(boxPadding, boxPadding) * scale;
         spriteBatch.DrawString(font, text, textPos, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-
-        // Unified hint at bottom
+        
         var hint = "ENTER - continue   ESC - levels";
         var hintSize = font.MeasureString(hint);
         var hintScale = MathF.Min(1f, (bounds.Width - 2f * screenMargin) / hintSize.X);
@@ -134,8 +130,7 @@ public sealed class LevelResultScreen : IGameScreen
         var globalName = string.IsNullOrWhiteSpace(bestGlobalPlayerName) ? "-" : bestGlobalPlayerName;
         var globalSteps = bestGlobalSteps.HasValue ? bestGlobalSteps.Value.ToString() : "-";
         var globalTime = bestGlobalTimeMs.HasValue ? FormatTimeSeconds(bestGlobalTimeMs.Value) : "-";
-
-        // Keep it monolithic to ensure MeasureString matches exactly what we draw.
+        
         return
             "LEVEL COMPLETED\n\n" +
             $"Your time:  {yourTime}\n" +
@@ -151,7 +146,6 @@ public sealed class LevelResultScreen : IGameScreen
 
     private static string FormatTimeSeconds(int timeMs)
     {
-        // Show like "2.3s" (same style as on your screenshot)
         var seconds = timeMs / 1000f;
         return $"{seconds:0.0}s";
     }

@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Sokoban.Core;
@@ -49,9 +49,7 @@ public sealed class PlayingScreen : IGameScreen
         steps = 0;
     }
 
-    // ---------------------------------------------------------------
-    // UPDATE
-    // ---------------------------------------------------------------
+
     public ScreenCommand Update(GameTime gameTime, KeyboardState current, KeyboardState previous)
     {
         if (level == null)
@@ -62,11 +60,9 @@ public sealed class PlayingScreen : IGameScreen
         if (IsKeyPressed(Keys.Escape, current, previous))
             return new ScreenCommand(ScreenCommandType.GoToLevelSelection);
 
-        // Restart current level.
         if (IsKeyPressed(Keys.R, current, previous))
             return new ScreenCommand(ScreenCommandType.RestartLevel);
 
-        // One move per update to avoid double-moves when multiple keys are pressed.
         var direction = GetPressedDirection(current, previous);
         if (direction.HasValue)
             TryMovement(direction.Value);
@@ -105,10 +101,7 @@ public sealed class PlayingScreen : IGameScreen
 
         return null;
     }
-
-    // ---------------------------------------------------------------
-    // CAMERA
-    // ---------------------------------------------------------------
+    
     private Vector2 ComputeCameraOffset(int screenWidth, int screenHeight)
     {
         if (level == null)
@@ -140,9 +133,7 @@ public sealed class PlayingScreen : IGameScreen
         return new Vector2(halfScreenX - camX, halfScreenY - camY);
     }
 
-    // ---------------------------------------------------------------
-    // DRAW
-    // ---------------------------------------------------------------
+
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
         if (level == null)
@@ -206,9 +197,6 @@ public sealed class PlayingScreen : IGameScreen
             screenHeight);
     }
 
-    // ---------------------------------------------------------------
-    // INPUT HELPERS
-    // ---------------------------------------------------------------
     private static bool IsKeyPressed(Keys key, KeyboardState current, KeyboardState previous)
         => current.IsKeyDown(key) && !previous.IsKeyDown(key);
 

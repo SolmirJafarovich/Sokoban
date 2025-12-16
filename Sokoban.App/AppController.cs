@@ -9,11 +9,7 @@ using Sokoban.Core;
 
 namespace Sokoban.App;
 
-/// <summary>
-/// Orchestrates screen navigation and high-level game flow.
-/// Keeps Game1 thin: Game1 owns framework lifecycle and rendering;
-/// AppController owns application state and navigation.
-/// </summary>
+
 public sealed class AppController
 {
     private readonly GraphicsDevice graphicsDevice;
@@ -128,7 +124,6 @@ public sealed class AppController
 
         if (command.Type == ScreenCommandType.RestartLevel)
         {
-            // Restart only makes sense while playing.
             if (ReferenceEquals(currentScreen, playingScreen))
             {
                 StartSelectedLevel();
@@ -140,14 +135,12 @@ public sealed class AppController
 
         if (command.Type == ScreenCommandType.GoToLevelSelection)
         {
-            // Special case: level just completed in PlayingScreen.
             if (ReferenceEquals(currentScreen, playingScreen) && command.Result != null)
             {
                 HandleLevelCompleted(command.Result);
                 return false;
             }
-
-            // Legacy behavior: if a result is passed from another screen, store it.
+            
             if (command.Result != null && currentProfile != null)
             {
                 var result = command.Result;
