@@ -9,16 +9,14 @@
   <component name="ChangeListManager">
     <list default="true" id="8786c22b-a78e-4dae-a611-25d518cdaf7f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Sokoban/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Sokoban/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/AppController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/AppController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile4.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile5.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/NewFile6.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level0.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level3.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/PlayingScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/PlayingScreen.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/ScreenCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/ScreenCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level4.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level4.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level5.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level5.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level6.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level6.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level7.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level8.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level9.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,13 +37,16 @@
     <setting file="file://$PROJECT_DIR$/Sokoban.App/GlobalLeaderboardEntry.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/GlobalLeaderboardService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelDirectory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelGeneration.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelGeneration/GenerationLevelStore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelGeneration/SokobanLevelGeneratorHuman.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelInfo.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/ProfileRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/IGameScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/LeaderboardScreen.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/LevelGeneratorScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/LevelResultScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/LevelSelectionScreen.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Screens/MainMenuScreen.cs" root0="FORCE_HIGHLIGHTING" />
@@ -136,7 +137,7 @@
       <workItem from="1765475208038" duration="1072000" />
       <workItem from="1765867213186" duration="1144000" />
       <workItem from="1765869068127" duration="717000" />
-      <workItem from="1765870559777" duration="3159000" />
+      <workItem from="1765870559777" duration="7201000" />
     </task>
     <servers />
   </component>
