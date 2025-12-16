@@ -39,7 +39,7 @@ public sealed class LevelSelectionScreen : IGameScreen
 
     public ScreenCommand Update(GameTime gameTime, KeyboardState current, KeyboardState previous)
     {
-        if (IsActionPressed(current, previous, Keys.Escape, Keys.Q))
+        if (IsKeyPressed(Keys.Escape, current, previous))
             return new ScreenCommand(ScreenCommandType.GoToProfileSelection);
 
         if (levelInfos.Count == 0)
@@ -194,7 +194,7 @@ public sealed class LevelSelectionScreen : IGameScreen
             spriteBatch.DrawString(uiFont, pageLabel, pagePosition, Color.LightGray);
         }
 
-        var hint = "WASD/ARROWS-move  ENTER-start  L-leaderboard  Q-profiles";
+        var hint = "WASD/ARROWS - move   ENTER - start   L - leaderboard   ESC - profiles";
         var hintY = height - uiFont.LineSpacing - 40f;
         DrawCenteredScaledText(spriteBatch, hint, hintY, Color.LightGray);
     }

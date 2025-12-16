@@ -26,7 +26,10 @@ public static class LevelLoader
 
             for (var x = 0; x < width; x++)
             {
-                var ch = x < line.Length ? line[x] : ' ';
+                // Levels may have a non-rectangular shape.
+                // Any cell outside the explicit line width is treated as a wall/void,
+                // so the player can't walk into "missing" space.
+                var ch = x < line.Length ? line[x] : '#';
                 var position = new Position(x, y);
                 var type = CellType.Empty;
 

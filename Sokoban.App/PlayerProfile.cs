@@ -46,7 +46,9 @@ public sealed class PlayerProfile
         if (string.IsNullOrWhiteSpace(levelId))
             return;
 
-        if (timeMs <= 0 || steps <= 0)
+        // 0 is a valid value (e.g., instant-complete or zero-move levels).
+        // Negative values are treated as "unknown".
+        if (timeMs < 0 || steps < 0)
         {
             CompletedLevels.Add(levelId);
             return;

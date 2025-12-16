@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -7,238 +8,173 @@ namespace Sokoban.App.Screens;
 public sealed class LevelResultScreen : IGameScreen
 {
     private readonly GraphicsDevice graphicsDevice;
-    private readonly SpriteFont uiFont;
-    private readonly Texture2D overlayTexture;
+    private readonly SpriteFont font;
 
     private readonly string levelId;
     private readonly int steps;
-    private readonly int elapsedMilliseconds;
+    private readonly int timeMs;
 
     private readonly int? bestProfileSteps;
-    private readonly int? bestProfileMilliseconds;
+    private readonly int? bestProfileTimeMs;
 
     private readonly string? bestGlobalPlayerName;
     private readonly int? bestGlobalSteps;
-    private readonly int? bestGlobalMilliseconds;
+    private readonly int? bestGlobalTimeMs;
+
+    // 1x1 texture for drawing lines/rectangles
+    private readonly Texture2D pixel;
 
     public LevelResultScreen(
         GraphicsDevice graphicsDevice,
-        SpriteFont uiFont,
+        SpriteFont font,
         string levelId,
         int steps,
-        int elapsedMilliseconds,
+        int timeMs,
         int? bestProfileSteps,
-        int? bestProfileMilliseconds,
+        int? bestProfileTimeMs,
         string? bestGlobalPlayerName,
         int? bestGlobalSteps,
-        int? bestGlobalMilliseconds)
+        int? bestGlobalTimeMs)
     {
         this.graphicsDevice = graphicsDevice;
-        this.uiFont = uiFont;
+        this.font = font;
 
         this.levelId = levelId;
         this.steps = steps;
-        this.elapsedMilliseconds = elapsedMilliseconds;
+        this.timeMs = timeMs;
 
         this.bestProfileSteps = bestProfileSteps;
-        this.bestProfileMilliseconds = bestProfileMilliseconds;
+        this.bestProfileTimeMs = bestProfileTimeMs;
 
         this.bestGlobalPlayerName = bestGlobalPlayerName;
         this.bestGlobalSteps = bestGlobalSteps;
-        this.bestGlobalMilliseconds = bestGlobalMilliseconds;
+        this.bestGlobalTimeMs = bestGlobalTimeMs;
 
-        overlayTexture = new Texture2D(graphicsDevice, 1, 1);
-        overlayTexture.SetData(new[] { Color.White });
+        pixel = new Texture2D(graphicsDevice, 1, 1);
+        pixel.SetData(new[] { Color.White });
     }
 
     public ScreenCommand Update(GameTime gameTime, KeyboardState current, KeyboardState previous)
     {
-        if (IsConfirmPressed(current, previous) || IsExitPressed(current, previous))
+        if (IsPressed(Keys.Escape, current, previous) || IsPressed(Keys.Enter, current, previous))
             return new ScreenCommand(ScreenCommandType.GoToLevelSelection);
 
         return ScreenCommand.None;
     }
 
+
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
-        var backBuffer = graphicsDevice.PresentationParameters;
-        var screenWidth = backBuffer.BackBufferWidth;
-        var screenHeight = backBuffer.BackBufferHeight;
+        var viewport = graphicsDevice.Viewport;
+        var bounds = new Rectangle(0, 0, viewport.Width, viewport.Height);
 
-        DrawOverlay(spriteBatch, screenWidth, screenHeight);
-        DrawWindow(spriteBatch, screenWidth, screenHeight);
+        // Build the full text block first, then measure it.
+        var text = BuildText();
+        var measured = font.MeasureString(text);
+
+        // Safe margins so the border doesn't touch screen edges
+        const float screenMargin = 20f;
+
+        // Padding inside the box around the text
+        const float boxPadding = 20f;
+
+        var targetWidth = bounds.Width - 2f * screenMargin;
+        var targetHeight = bounds.Height - 2f * screenMargin;
+
+        // Box size in "unscaled" pixels
+        var unscaledBoxWidth = measured.X + 2f * boxPadding;
+        var unscaledBoxHeight = measured.Y + 2f * boxPadding;
+
+        // Scale down only when needed
+        var scaleX = targetWidth / unscaledBoxWidth;
+        var scaleY = targetHeight / unscaledBoxHeight;
+        var scale = MathF.Min(1f, MathF.Min(scaleX, scaleY));
+
+        var boxSize = new Vector2(unscaledBoxWidth, unscaledBoxHeight) * scale;
+
+        var boxTopLeft = new Vector2(
+            (bounds.Width - boxSize.X) * 0.5f,
+            (bounds.Height - boxSize.Y) * 0.5f);
+
+        // Draw box background (slightly transparent)
+        var boxRect = new Rectangle(
+            (int)boxTopLeft.X,
+            (int)boxTopLeft.Y,
+            (int)boxSize.X,
+            (int)boxSize.Y);
+
+        DrawFilledRect(spriteBatch, boxRect, new Color(0, 0, 0, 220));
+
+        // Draw border (2px relative to scale, but at least 1px)
+        var borderThickness = Math.Max(1, (int)MathF.Round(2f * scale));
+        DrawRect(spriteBatch, boxRect, Color.White, borderThickness);
+
+        // Draw text inside with padding, scaled
+        var textPos = boxTopLeft + new Vector2(boxPadding, boxPadding) * scale;
+        spriteBatch.DrawString(font, text, textPos, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+
+        // Unified hint at bottom
+        var hint = "ENTER - continue   ESC - levels";
+        var hintSize = font.MeasureString(hint);
+        var hintScale = MathF.Min(1f, (bounds.Width - 2f * screenMargin) / hintSize.X);
+
+        var hintPos = new Vector2(
+            (bounds.Width - hintSize.X * hintScale) * 0.5f,
+            bounds.Height - screenMargin - hintSize.Y * hintScale);
+
+        spriteBatch.DrawString(font, hint, hintPos, new Color(220, 220, 220), 0f, Vector2.Zero, hintScale, SpriteEffects.None, 0f);
     }
 
-    private void DrawOverlay(SpriteBatch spriteBatch, int screenWidth, int screenHeight)
+    private string BuildText()
     {
-        var fullscreen = new Rectangle(0, 0, screenWidth, screenHeight);
-        var backgroundColor = new Color(0, 0, 0, 180);
-        spriteBatch.Draw(overlayTexture, fullscreen, backgroundColor);
+        var yourTime = FormatTimeSeconds(timeMs);
+        var bestProfileTime = bestProfileTimeMs.HasValue ? FormatTimeSeconds(bestProfileTimeMs.Value) : "-";
+        var bestProfileStepsText = bestProfileSteps.HasValue ? bestProfileSteps.Value.ToString() : "-";
+
+        var globalName = string.IsNullOrWhiteSpace(bestGlobalPlayerName) ? "-" : bestGlobalPlayerName;
+        var globalSteps = bestGlobalSteps.HasValue ? bestGlobalSteps.Value.ToString() : "-";
+        var globalTime = bestGlobalTimeMs.HasValue ? FormatTimeSeconds(bestGlobalTimeMs.Value) : "-";
+
+        // Keep it monolithic to ensure MeasureString matches exactly what we draw.
+        return
+            "LEVEL COMPLETED\n\n" +
+            $"Your time:  {yourTime}\n" +
+            $"Your steps: {steps}\n\n" +
+            "Your best on this level:\n" +
+            $"  Time:  {bestProfileTime}\n" +
+            $"  Steps: {bestProfileStepsText}\n\n" +
+            "Global best on this level:\n" +
+            $"  Player: {globalName}\n" +
+            $"  Steps:  {globalSteps}\n" +
+            $"  Time:   {globalTime}\n";
     }
 
-    private void DrawWindow(SpriteBatch spriteBatch, int screenWidth, int screenHeight)
+    private static string FormatTimeSeconds(int timeMs)
     {
-        var lines = BuildLines();
-        var lineSpacing = 8f;
-
-        var maxLineWidth = 0f;
-        foreach (var line in lines)
-        {
-            var size = uiFont.MeasureString(line);
-            if (size.X > maxLineWidth)
-                maxLineWidth = size.X;
-        }
-
-        var padding = 24f;
-        var windowWidth = maxLineWidth + padding * 2f;
-        var windowHeight = lines.Count * uiFont.LineSpacing + (lines.Count - 1) * lineSpacing + padding * 2f;
-
-        if (windowWidth > screenWidth - 40f)
-            windowWidth = screenWidth - 40f;
-
-        if (windowHeight > screenHeight - 40f)
-            windowHeight = screenHeight - 40f;
-
-        var windowX = (screenWidth - windowWidth) / 2f;
-        var windowY = (screenHeight - windowHeight) / 2f;
-
-        var windowRect = new Rectangle(
-            (int)windowX,
-            (int)windowY,
-            (int)windowWidth,
-            (int)windowHeight);
-
-        var windowColor = new Color(20, 20, 20, 240);
-        spriteBatch.Draw(overlayTexture, windowRect, windowColor);
-
-        var borderThickness = 2;
-        var borderColor = new Color(200, 200, 200);
-
-        DrawBorder(spriteBatch, windowRect, borderThickness, borderColor);
-
-        var currentY = windowY + padding;
-
-        foreach (var line in lines)
-        {
-            var truncated = TruncateToFit(line, windowWidth - padding * 2f);
-            var size = uiFont.MeasureString(truncated);
-            var x = windowX + (windowWidth - size.X) / 2f;
-
-            spriteBatch.DrawString(uiFont, truncated, new Vector2(x, currentY), Color.White);
-            currentY += uiFont.LineSpacing + lineSpacing;
-        }
+        // Show like "2.3s" (same style as on your screenshot)
+        var seconds = timeMs / 1000f;
+        return $"{seconds:0.0}s";
     }
 
-    private void DrawBorder(SpriteBatch spriteBatch, Rectangle rect, int thickness, Color color)
+    private static bool IsPressed(Keys key, KeyboardState current, KeyboardState previous)
     {
-        var top = new Rectangle(rect.Left, rect.Top, rect.Width, thickness);
-        var bottom = new Rectangle(rect.Left, rect.Bottom - thickness, rect.Width, thickness);
-        var left = new Rectangle(rect.Left, rect.Top, thickness, rect.Height);
-        var right = new Rectangle(rect.Right - thickness, rect.Top, thickness, rect.Height);
-
-        spriteBatch.Draw(overlayTexture, top, color);
-        spriteBatch.Draw(overlayTexture, bottom, color);
-        spriteBatch.Draw(overlayTexture, left, color);
-        spriteBatch.Draw(overlayTexture, right, color);
+        return current.IsKeyDown(key) && previous.IsKeyUp(key);
     }
 
-    private List<string> BuildLines()
+    private void DrawFilledRect(SpriteBatch spriteBatch, Rectangle rect, Color color)
     {
-        var lines = new List<string>();
-
-        lines.Add("LEVEL COMPLETED");
-        lines.Add(string.Empty);
-
-        var seconds = elapsedMilliseconds / 1000.0;
-        var yourTime = $"Your time: {seconds:0.0}s";
-        var yourSteps = $"Your steps: {steps}";
-
-        lines.Add(yourTime);
-        lines.Add(yourSteps);
-        lines.Add(string.Empty);
-
-        if (bestProfileMilliseconds.HasValue || bestProfileSteps.HasValue)
-        {
-            var bestProfileTimeText = bestProfileMilliseconds.HasValue
-                ? $"{bestProfileMilliseconds.Value / 1000.0:0.0}s"
-                : "—";
-
-            var bestProfileStepsText = bestProfileSteps.HasValue
-                ? bestProfileSteps.Value.ToString()
-                : "—";
-
-            lines.Add("Your best on this level:");
-            lines.Add($"  Time:  {bestProfileTimeText}");
-            lines.Add($"  Steps: {bestProfileStepsText}");
-            lines.Add(string.Empty);
-        }
-
-        if (bestGlobalSteps.HasValue || bestGlobalMilliseconds.HasValue)
-        {
-            var bestGlobalTimeText = bestGlobalMilliseconds.HasValue
-                ? $"{bestGlobalMilliseconds.Value / 1000.0:0.0}s"
-                : "—";
-
-            var bestGlobalStepsText = bestGlobalSteps.HasValue
-                ? bestGlobalSteps.Value.ToString()
-                : "—";
-
-            var playerName = string.IsNullOrWhiteSpace(bestGlobalPlayerName)
-                ? "Unknown player"
-                : bestGlobalPlayerName;
-
-            lines.Add("Global best on this level:");
-            lines.Add($"  Player: {playerName}");
-            lines.Add($"  Steps:  {bestGlobalStepsText}");
-            lines.Add($"  Time:   {bestGlobalTimeText}");
-            lines.Add(string.Empty);
-        }
-
-        lines.Add("ENTER / SPACE - continue");
-        lines.Add("Q / ESC - levels");
-
-        return lines;
+        spriteBatch.Draw(pixel, rect, color);
     }
 
-    private string TruncateToFit(string text, float maxWidth)
+    private void DrawRect(SpriteBatch spriteBatch, Rectangle rect, Color color, int thickness)
     {
-        var width = uiFont.MeasureString(text).X;
-        if (width <= maxWidth)
-            return text;
-
-        const string ellipsis = "...";
-        var ellipsisWidth = uiFont.MeasureString(ellipsis).X;
-
-        var maxTextWidth = maxWidth - ellipsisWidth;
-        if (maxTextWidth <= 0)
-            return ellipsis;
-
-        var result = text;
-        while (result.Length > 0)
-        {
-            result = result.Substring(0, result.Length - 1);
-            var candidate = result + ellipsis;
-            if (uiFont.MeasureString(candidate).X <= maxTextWidth)
-                return candidate;
-        }
-
-        return ellipsis;
-    }
-
-    private static bool IsConfirmPressed(KeyboardState current, KeyboardState previous)
-    {
-        return IsKeyPressed(Keys.Enter, current, previous) ||
-               IsKeyPressed(Keys.Space, current, previous);
-    }
-
-    private static bool IsExitPressed(KeyboardState current, KeyboardState previous)
-    {
-        return IsKeyPressed(Keys.Q, current, previous) ||
-               IsKeyPressed(Keys.Escape, current, previous);
-    }
-
-    private static bool IsKeyPressed(Keys key, KeyboardState current, KeyboardState previous)
-    {
-        return current.IsKeyDown(key) && !previous.IsKeyDown(key);
+        // top
+        spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y, rect.Width, thickness), color);
+        // bottom
+        spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Bottom - thickness, rect.Width, thickness), color);
+        // left
+        spriteBatch.Draw(pixel, new Rectangle(rect.X, rect.Y, thickness, rect.Height), color);
+        // right
+        spriteBatch.Draw(pixel, new Rectangle(rect.Right - thickness, rect.Y, thickness, rect.Height), color);
     }
 }

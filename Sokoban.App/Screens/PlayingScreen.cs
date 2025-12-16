@@ -59,45 +59,47 @@ public sealed class PlayingScreen : IGameScreen
 
         elapsedMilliseconds += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-        if (IsActionPressed(current, previous, Keys.Escape, Keys.Q))
+        if (IsKeyPressed(Keys.Escape, current, previous))
             return new ScreenCommand(ScreenCommandType.GoToLevelSelection);
 
-        TryMovement(current, previous, Direction.Up);
-        TryMovement(current, previous, Direction.Down);
-        TryMovement(current, previous, Direction.Left);
-        TryMovement(current, previous, Direction.Right);
+        // One move per update to avoid double-moves when multiple keys are pressed.
+        var direction = GetPressedDirection(current, previous);
+        if (direction.HasValue)
+            TryMovement(direction.Value);
 
         if (level.IsCompleted())
         {
             var id = currentLevelId ?? string.Empty;
-            var safeTime = elapsedMilliseconds == 0 ? 1 : elapsedMilliseconds;
-            var safeSteps = steps == 0 ? 1 : steps;
-
             return new ScreenCommand(
                 ScreenCommandType.GoToLevelSelection,
-                new LevelResult(id, safeTime, safeSteps));
+                new LevelResult(id, elapsedMilliseconds, steps));
         }
 
         return ScreenCommand.None;
     }
 
-    private void TryMovement(KeyboardState current, KeyboardState previous, Direction direction)
+    private void TryMovement(Direction direction)
     {
-        bool pressed = direction switch
-        {
-            Direction.Up => IsUpPressed(current, previous),
-            Direction.Down => IsDownPressed(current, previous),
-            Direction.Left => IsLeftPressed(current, previous),
-            Direction.Right => IsRightPressed(current, previous),
-            _ => false
-        };
-
-        if (!pressed || level == null)
+        if (level == null)
             return;
 
         var result = level.TryMove(direction);
         if (result != MoveResult.None)
             steps++;
+    }
+
+    private static Direction? GetPressedDirection(KeyboardState current, KeyboardState previous)
+    {
+        if (IsUpPressed(current, previous))
+            return Direction.Up;
+        if (IsDownPressed(current, previous))
+            return Direction.Down;
+        if (IsLeftPressed(current, previous))
+            return Direction.Left;
+        if (IsRightPressed(current, previous))
+            return Direction.Right;
+
+        return null;
     }
 
     // ---------------------------------------------------------------
@@ -118,8 +120,18 @@ public sealed class PlayingScreen : IGameScreen
         float halfScreenX = screenWidth / 2f;
         float halfScreenY = screenHeight / 2f;
 
-        float camX = MathHelper.Clamp(playerX, halfScreenX, worldWidth - halfScreenX);
-        float camY = MathHelper.Clamp(playerY, halfScreenY, worldHeight - halfScreenY);
+        float camX;
+        float camY;
+
+        if (worldWidth <= screenWidth)
+            camX = worldWidth / 2f;
+        else
+            camX = MathHelper.Clamp(playerX, halfScreenX, worldWidth - halfScreenX);
+
+        if (worldHeight <= screenHeight)
+            camY = worldHeight / 2f;
+        else
+            camY = MathHelper.Clamp(playerY, halfScreenY, worldHeight - halfScreenY);
 
         return new Vector2(halfScreenX - camX, halfScreenY - camY);
     }
@@ -182,13 +194,10 @@ public sealed class PlayingScreen : IGameScreen
         spriteBatch.DrawString(uiFont, timeText, new Vector2(20, 20), Color.LightGray);
         spriteBatch.DrawString(uiFont, stepsText, new Vector2(20, 60), Color.LightGray);
 
-        var hint = "WASD/ARROWS - move Q - levels";
-        var hintSize = uiFont.MeasureString(hint);
-        
         UiTextUtils.DrawHint(
             spriteBatch,
             uiFont,
-            "ENTER - confirm Q - exit",
+            "WASD/ARROWS - move   ESC - levels",
             screenWidth,
             screenHeight);
     }

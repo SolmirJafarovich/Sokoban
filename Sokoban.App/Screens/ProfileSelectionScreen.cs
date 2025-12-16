@@ -74,7 +74,7 @@ public sealed class ProfileSelectionScreen : IGameScreen
         if (IsActionPressed(current, previous, Keys.F2, Keys.R))
             StartRename();
 
-        if (IsActionPressed(current, previous, Keys.Escape, Keys.Q))
+        if (IsKeyPressed(Keys.Escape, current, previous))
             return new ScreenCommand(ScreenCommandType.GoToMainMenu);
 
         return ScreenCommand.None;
@@ -135,8 +135,8 @@ public sealed class ProfileSelectionScreen : IGameScreen
         }
 
         var hint = isEditingName
-            ? "Type new name, BACKSPACE to delete, ENTER to confirm, ESC to cancel"
-            : "N - new profile X - delete R - rename Q - menu";
+            ? "Type name, BACKSPACE - delete, ENTER - confirm, ESC - cancel"
+            : "N - new profile   X - delete   R - rename   ESC - menu";
 
         UiTextUtils.DrawHint(spriteBatch, uiFont, hint, width, height);
     }
@@ -188,7 +188,7 @@ public sealed class ProfileSelectionScreen : IGameScreen
         if (!isEditingName || selectedIndex < 0 || selectedIndex >= profiles.Count)
             return;
 
-        if (IsActionPressed(current, previous, Keys.Escape, Keys.Q))
+        if (IsKeyPressed(Keys.Escape, current, previous))
         {
             isEditingName = false;
             editingNameBuffer = string.Empty;

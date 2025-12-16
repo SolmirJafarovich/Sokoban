@@ -48,7 +48,7 @@ public sealed class SettingsScreen : IGameScreen
         if (IsActionPressed(current, previous, Keys.Enter, Keys.Space) && selectedIndex == 2)
             settings.IsFullScreen = !settings.IsFullScreen;
 
-        if (IsActionPressed(current, previous, Keys.Escape, Keys.Q))
+        if (IsKeyPressed(Keys.Escape, current, previous))
             return new ScreenCommand(ScreenCommandType.GoToMainMenu);
 
         return ScreenCommand.None;
@@ -76,7 +76,7 @@ public sealed class SettingsScreen : IGameScreen
         UiTextUtils.DrawHint(
             spriteBatch,
             uiFont,
-            "LEFT/RIGHT - change Q - menu",
+            "LEFT/RIGHT - change   ESC - menu",
             width,
             height);
     }

@@ -58,7 +58,7 @@ public sealed class LeaderboardScreen : IGameScreen
 
     public ScreenCommand Update(GameTime gameTime, KeyboardState current, KeyboardState previous)
     {
-        if (IsActionPressed(current, previous, Keys.Escape, Keys.Q) ||
+        if (IsKeyPressed(Keys.Escape, current, previous) ||
             IsActionPressed(current, previous, Keys.Back, Keys.Tab))
         {
             return new ScreenCommand(ScreenCommandType.GoToLevelSelection);
@@ -125,7 +125,7 @@ public sealed class LeaderboardScreen : IGameScreen
         UiTextUtils.DrawHint(
             spriteBatch,
             uiFont,
-            "LEFT/RIGHT - page Q - levels",
+            "LEFT/RIGHT - page   ESC - levels",
             width,
             height);
     }

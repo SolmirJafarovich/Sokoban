@@ -43,7 +43,7 @@ public sealed class MainMenuScreen : IGameScreen
             };
         }
 
-        if (IsActionPressed(current, previous, Keys.Escape, Keys.Q))
+        if (IsKeyPressed(Keys.Escape, current, previous))
             return new ScreenCommand(ScreenCommandType.ExitGame);
 
         return ScreenCommand.None;
@@ -88,7 +88,7 @@ public sealed class MainMenuScreen : IGameScreen
         UiTextUtils.DrawHint(
             spriteBatch,
             uiFont,
-            "ENTER - confirm Q - exit",
+            "ENTER - confirm   ESC - exit",
             width,
             height);
     }

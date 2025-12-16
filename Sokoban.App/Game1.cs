@@ -34,16 +34,7 @@ public sealed class Game1 : Game
 
     private IReadOnlyList<LevelInfo> levelInfos = Array.Empty<LevelInfo>();
 
-    private MainMenuScreen mainMenuScreen = null!;
-    private SettingsScreen settingsScreen = null!;
-    private ProfileSelectionScreen profileSelectionScreen = null!;
-    private LevelSelectionScreen levelSelectionScreen = null!;
-    private PlayingScreen playingScreen = null!;
-    private LeaderboardScreen leaderboardScreen = null!;
-    private LevelResultScreen? levelResultScreen;
-
-    private GlobalLeaderboardService globalLeaderboardService = null!;
-    private IGameScreen currentScreen = null!;
+    private AppController controller = null!;
 
     public Game1()
     {
@@ -74,8 +65,6 @@ public sealed class Game1 : Game
 
         levelInfos = LevelDirectory.LoadLevels(baseDirectory);
 
-        globalLeaderboardService = new GlobalLeaderboardService();
-
         ApplyDisplayMode();
 
         base.Initialize();
@@ -95,26 +84,25 @@ public sealed class Game1 : Game
         playerTexture = Content.Load<Texture2D>("Tiles/player");
         uiFont = Content.Load<SpriteFont>("Fonts/UiFont");
 
-        mainMenuScreen = new MainMenuScreen(GraphicsDevice, uiFont, whiteTexture);
+        var globalLeaderboardService = new GlobalLeaderboardService();
 
-        settingsScreen = new SettingsScreen(GraphicsDevice, uiFont, whiteTexture, settings);
+        var mainMenuScreen = new MainMenuScreen(GraphicsDevice, uiFont, whiteTexture);
 
-        profileSelectionScreen = new ProfileSelectionScreen(
+        var settingsScreen = new SettingsScreen(GraphicsDevice, uiFont, whiteTexture, settings);
+
+        var profileSelectionScreen = new ProfileSelectionScreen(
             GraphicsDevice,
             uiFont,
             whiteTexture,
             profiles);
 
-        levelSelectionScreen = new LevelSelectionScreen(
+        var levelSelectionScreen = new LevelSelectionScreen(
             GraphicsDevice,
             uiFont,
             whiteTexture,
             levelInfos);
 
-        if (currentProfile != null)
-            levelSelectionScreen.SetCurrentProfile(currentProfile);
-
-        playingScreen = new PlayingScreen(
+        var playingScreen = new PlayingScreen(
             GraphicsDevice,
             uiFont,
             floorTexture,
@@ -123,13 +111,27 @@ public sealed class Game1 : Game
             crateTexture,
             playerTexture);
 
-        leaderboardScreen = new LeaderboardScreen(
+        var leaderboardScreen = new LeaderboardScreen(
             GraphicsDevice,
             uiFont,
             whiteTexture,
             globalLeaderboardService);
 
-        currentScreen = mainMenuScreen;
+        controller = new AppController(
+            GraphicsDevice,
+            uiFont,
+            settingsRepository,
+            profileRepository,
+            settings,
+            profiles,
+            currentProfile,
+            levelInfos,
+            mainMenuScreen,
+            settingsScreen,
+            profileSelectionScreen,
+            levelSelectionScreen,
+            playingScreen,
+            leaderboardScreen);
 
         base.LoadContent();
     }
@@ -138,12 +140,17 @@ public sealed class Game1 : Game
     {
         var currentKeyboard = Keyboard.GetState();
 
-        var command = currentScreen.Update(gameTime, currentKeyboard, previousKeyboardState);
-        HandleScreenCommand(command);
+        var exitRequested = controller.Update(gameTime, currentKeyboard, previousKeyboardState);
 
         previousKeyboardState = currentKeyboard;
 
         ApplyDisplayMode();
+
+        if (exitRequested)
+        {
+            Exit();
+            return;
+        }
 
         base.Update(gameTime);
     }
@@ -153,157 +160,12 @@ public sealed class Game1 : Game
         GraphicsDevice.Clear(Color.Black);
 
         spriteBatch.Begin();
-        currentScreen.Draw(gameTime, spriteBatch);
+        controller.Draw(gameTime, spriteBatch);
         spriteBatch.End();
 
         base.Draw(gameTime);
     }
 
-    private void HandleScreenCommand(ScreenCommand command)
-    {
-        if (command.Type == ScreenCommandType.None)
-            return;
-
-        if (command.Type == ScreenCommandType.ExitGame)
-        {
-            Exit();
-            return;
-        }
-
-        if (command.Type == ScreenCommandType.GoToMainMenu)
-        {
-            if (ReferenceEquals(currentScreen, settingsScreen))
-                settingsRepository.Save(settings);
-
-            if (ReferenceEquals(currentScreen, profileSelectionScreen))
-                profileRepository.Save(profiles);
-
-            currentScreen = mainMenuScreen;
-            return;
-        }
-
-        if (command.Type == ScreenCommandType.GoToSettings)
-        {
-            currentScreen = settingsScreen;
-            return;
-        }
-
-        if (command.Type == ScreenCommandType.GoToProfileSelection)
-        {
-            currentScreen = profileSelectionScreen;
-            return;
-        }
-
-        if (command.Type == ScreenCommandType.GoToLevelSelection)
-        {
-            // Особый случай: уровень только что завершён в PlayingScreen —
-            // показываем окно результата вместо мгновенного выхода к выбору уровня.
-            if (ReferenceEquals(currentScreen, playingScreen) && command.Result != null)
-            {
-                HandleLevelCompleted(command.Result);
-                return;
-            }
-
-            // Старое поведение для остальных экранов, где в Result может быть статистика
-            if (command.Result != null && currentProfile != null)
-            {
-                var result = command.Result;
-                currentProfile.UpdateLevelStats(result.LevelId, result.TimeMs, result.Steps);
-                profileRepository.Save(profiles);
-            }
-
-            if (ReferenceEquals(currentScreen, profileSelectionScreen))
-                SyncCurrentProfileFromSelection();
-
-            currentScreen = levelSelectionScreen;
-            return;
-        }
-
-        if (command.Type == ScreenCommandType.GoToPlaying)
-        {
-            StartSelectedLevel();
-            currentScreen = playingScreen;
-            return;
-        }
-
-        if (command.Type == ScreenCommandType.GoToLeaderboard)
-        {
-            OpenLeaderboard();
-            return;
-        }
-    }
-
-    private void HandleLevelCompleted(LevelResult result)
-    {
-        if (currentProfile != null)
-        {
-            currentProfile.UpdateLevelStats(result.LevelId, result.TimeMs, result.Steps);
-            profileRepository.Save(profiles);
-        }
-        
-        var bestProfileSteps = (int?)null;
-        var bestProfileMilliseconds = (int?)null;
-
-        var bestGlobalPlayerName = (string?)null;
-        var bestGlobalSteps = (int?)null;
-        var bestGlobalMilliseconds = (int?)null;
-
-        levelResultScreen = new LevelResultScreen(
-            GraphicsDevice,
-            uiFont,
-            result.LevelId,
-            result.Steps,
-            result.TimeMs,
-            bestProfileSteps,
-            bestProfileMilliseconds,
-            bestGlobalPlayerName,
-            bestGlobalSteps,
-            bestGlobalMilliseconds);
-
-        currentScreen = levelResultScreen;
-    }
-
-    private void SyncCurrentProfileFromSelection()
-    {
-        var selectedProfile = profileSelectionScreen.CurrentProfile;
-        if (selectedProfile != null)
-        {
-            currentProfile = selectedProfile;
-            levelSelectionScreen.SetCurrentProfile(currentProfile);
-        }
-
-        profileRepository.Save(profiles);
-    }
-
-    private void StartSelectedLevel()
-    {
-        if (levelInfos.Count == 0)
-            throw new InvalidOperationException("No levels loaded.");
-
-        var index = levelSelectionScreen.SelectedLevelIndex;
-        if (index < 0 || index >= levelInfos.Count)
-            index = 0;
-
-        var info = levelInfos[index];
-        var lines = File.ReadAllLines(info.FilePath);
-        var level = LevelLoader.LoadFromLines(lines);
-        var levelId = Path.GetFileName(info.FilePath);
-
-        playingScreen.SetLevel(level, levelId);
-    }
-
-    private void OpenLeaderboard()
-    {
-        if (levelInfos.Count == 0)
-            return;
-
-        var selectedIndex = levelSelectionScreen.SelectedLevelIndex;
-        if (selectedIndex < 0 || selectedIndex >= levelInfos.Count)
-            selectedIndex = 0;
-
-        leaderboardScreen.SetData(levelInfos, profiles, selectedIndex);
-        currentScreen = leaderboardScreen;
-    }
 
     private void ApplyDisplayMode()
     {

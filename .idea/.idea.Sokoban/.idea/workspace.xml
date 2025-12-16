@@ -8,10 +8,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8786c22b-a78e-4dae-a611-25d518cdaf7f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Sokoban.App/Screens/LevelResultScreen.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Sokoban/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Sokoban/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Content/Content.mgcb" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Content/Content.mgcb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Content/Fonts/UiFont.spritefont" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Content/Fonts/UiFont.spritefont" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sokoban.App/Game1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Game1.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/GameMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/GameMode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/GameScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/GameScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/GameSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/GameSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/GlobalLeaderboardEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/GlobalLeaderboardEntry.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/GlobalLeaderboardService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/GlobalLeaderboardService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/LevelDirectory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/LevelDirectory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/LevelInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/LevelInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level3.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level4.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level4.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Levels/level5.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Levels/level5.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/ProfileRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/ProfileRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/IGameScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/IGameScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/LeaderboardScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/LeaderboardScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/LevelResultScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/LevelResultScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/LevelSelectionScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/LevelSelectionScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/MainMenuScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/MainMenuScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/PlayingScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/PlayingScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/ProfileSelectionScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/ProfileSelectionScreen.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/ScreenCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/ScreenCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Screens/SettingsScreen.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Screens/SettingsScreen.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/SettingsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/SettingsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/Sokoban.App.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/Sokoban.App.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.App/UiTextUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.App/UiTextUtils.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.Core/Cell.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.Core/Cell.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.Core/CellType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.Core/CellType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.Core/Direction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.Core/Direction.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.Core/Level.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.Core/Level.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.Core/LevelLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.Core/LevelLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.Core/MoveResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.Core/MoveResult.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.Core/Position.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.Core/Position.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.Core/Sokoban.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.Core/Sokoban.Core.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sokoban.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Sokoban.sln" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +69,7 @@
     <setting file="file://$PROJECT_DIR$/Sokoban.App/GlobalLeaderboardService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelDirectory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sokoban.App/LevelResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/PlayerProfile.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/ProfileRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Sokoban.App/Program.cs" root0="FORCE_HIGHLIGHTING" />
@@ -81,6 +118,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -123,7 +161,11 @@
       <workItem from="1765373009649" duration="1383000" />
       <workItem from="1765374411943" duration="3746000" />
       <workItem from="1765385892205" duration="9870000" />
-      <workItem from="1765440934498" duration="10657000" />
+      <workItem from="1765440934498" duration="11304000" />
+      <workItem from="1765475208038" duration="1072000" />
+      <workItem from="1765867213186" duration="1144000" />
+      <workItem from="1765869068127" duration="717000" />
+      <workItem from="1765870559777" duration="2069000" />
     </task>
     <servers />
   </component>
